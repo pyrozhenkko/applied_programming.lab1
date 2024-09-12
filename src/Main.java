@@ -4,26 +4,22 @@ import java.util.Scanner;
  * Клас для представлення чисел Люка або Фібоначчі
  */
 class NumberSequence {
-    private int index;  // Індекс числа в послідовності
-    private int value;  // Значення числа
+    private int index;
+    private int value;
 
-    // Конструктор для створення числа за індексом та значенням
     public NumberSequence(int index, int value) {
         this.index = index;
         this.value = value;
     }
 
-    // Метод доступу до індексу числа
     public int getIndex() {
         return index;
     }
 
-    // Метод доступу до значення числа
     public int getValue() {
         return value;
     }
 
-    // Метод для виведення інформації про число
     public void show() {
         System.out.println("Index: " + index + ", Value: " + value);
     }
