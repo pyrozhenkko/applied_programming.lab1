@@ -1,9 +1,34 @@
 import java.util.Scanner;
 
 /**
- * main class, which take quantity of Lucas numbers
- * @author pyroz
+ * Клас для представлення чисел Люка або Фібоначчі
  */
+class NumberSequence {
+    private int index;  // Індекс числа в послідовності
+    private int value;  // Значення числа
+
+    // Конструктор для створення числа за індексом та значенням
+    public NumberSequence(int index, int value) {
+        this.index = index;
+        this.value = value;
+    }
+
+    // Метод доступу до індексу числа
+    public int getIndex() {
+        return index;
+    }
+
+    // Метод доступу до значення числа
+    public int getValue() {
+        return value;
+    }
+
+    // Метод для виведення інформації про число
+    public void show() {
+        System.out.println("Index: " + index + ", Value: " + value);
+    }
+}
+
 public class Main {
     public static void main(String[] args) {
         int n;
@@ -14,68 +39,67 @@ public class Main {
             n = scan.nextInt();
         } while (n < 0);
 
-        show(n);
+        showLucasNumbers(n);
     }
 
     /**
-     *
-     * @param n, n is quantity of Lucas numbers(size of the array)
-     * @return arr, array of Lucas numbers
+     * Створює масив чисел Люка
+     * @param n кількість чисел Люка
+     * @return масив об'єктів NumberSequence
      */
-    public static int[] create_array(int n) {
-        int[] arr = new int[n];
+    public static NumberSequence[] createLucasArray(int n) {
+        NumberSequence[] arr = new NumberSequence[n];
         if (n >= 1) {
-            arr[0] = 2;
+            arr[0] = new NumberSequence(0, 2);
         }
-        if (n >= 2){
-            arr[1] = 1;
+        if (n >= 2) {
+            arr[1] = new NumberSequence(1, 1);
         }
         for (int i = 2; i < n; i++) {
-            arr[i] = arr[i - 1] + arr[i - 2];
+            int value = arr[i - 1].getValue() + arr[i - 2].getValue();
+            arr[i] = new NumberSequence(i, value);
         }
         return arr;
     }
 
     /**
-     * @param n, n is quantity of Lucas numbers(size of the array)
-     * function used for showing input and output
+     * Показує числа Люка та фільтрує їх за певним критерієм
+     * @param n кількість чисел Люка
      */
-    public static void show(int n) {
-        int[] arr1 = array_check(n);
-        int[] arr2 = create_array(n);
+    public static void showLucasNumbers(int n) {
+        NumberSequence[] allLucasNumbers = createLucasArray(n);
+        NumberSequence[] filteredNumbers = filterLucasNumbers(allLucasNumbers);
+
         System.out.println("Input values:");
         System.out.println("n = " + n);
         System.out.println("Lucas numbers:");
-        for (int el : arr2){
-            System.out.print(el + " ");
+        for (NumberSequence num : allLucasNumbers) {
+            System.out.print(num.getValue() + " ");
         }
-        System.out.println("\nYour array:");
-        for (int el : arr1) {
-            if (el != 0) {
-                System.out.print(el);
-            }
+        System.out.println("\nFiltered Lucas numbers:");
+        for (NumberSequence num : filteredNumbers) {
+            num.show();
         }
     }
 
     /**
-     *
-     * @param n,  n is quantity of Lucas numbers(size of the array)
-     * @return result, sorted array of Lucas numbers
+     * Фільтрує числа Люка, залишаючи лише ті, що задовольняють певний критерій (корінь кубічний з (число + 1) є цілим)
+     * @param numbers масив чисел Люка
+     * @return відфільтрований масив чисел
      */
-    public static int[] array_check(int n) {
-        int[] arr = create_array(n);
-        int[] arr2 = new int[n];
+    public static NumberSequence[] filterLucasNumbers(NumberSequence[] numbers) {
+        NumberSequence[] tempArray = new NumberSequence[numbers.length];
         int index = 0;
 
-        for (int el : arr) {
-            double temp = Math.cbrt(el + 1);
+        for (NumberSequence num : numbers) {
+            double temp = Math.cbrt(num.getValue() + 1);
             if (temp % 1 == 0) {
-                arr2[index++] = el;
+                tempArray[index++] = num;
             }
         }
 
-        int[] result = new int[index];
-        System.arraycopy(arr2, 0, result, 0, index);
+        NumberSequence[] result = new NumberSequence[index];
+        System.arraycopy(tempArray, 0, result, 0, index);
 
         return result;
     }
